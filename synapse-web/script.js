@@ -1,25 +1,6 @@
 const generateBtn = document.getElementById("generateBtn");
 const preview = document.getElementById("preview");
 
-// Fake AI for now. In Step 3 this becomes a real AI call.
-function makeFakeDeck(name) {
-  return {
-    name: name || "My Deck",
-    cards: [
-      {
-        q: "What does Ohm's law state?",
-        a: "V = I x R",
-        w: ["V = I / R", "P = V x I", "R = V x I"]
-      },
-      {
-        q: "What is the unit of resistance?",
-        a: "Ohm",
-        w: ["Farad", "Henry", "Volt"]
-      }
-    ]
-  };
-}
-
 function showDeck(deck) {
   preview.innerHTML = `<h2>${deck.name} (${deck.cards.length} cards)</h2>`;
   deck.cards.forEach((c) => {
@@ -32,7 +13,21 @@ function showDeck(deck) {
   });
 }
 
-generateBtn.addEventListener("click", () => {
+generateBtn.addEventListener("click", async () => {
   const name = document.getElementById("deckName").value;
-  showDeck(makeFakeDeck(name));
+  const notes = document.getElementById("notes").value;
+
+  generateBtn.textContent = "Generating...";
+  try {
+    const response = await fetch("http://localhost:3000/api/generate", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, notes })
+    });
+    const deck = await response.json();
+    showDeck(deck);
+  } catch (err) {
+    preview.innerHTML = "<p>Could not reach the server. Is it running?</p>";
+  }
+  generateBtn.textContent = "Generate deck";
 });
