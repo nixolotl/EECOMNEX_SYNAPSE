@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synapse Deck Maker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main>
+    <h1>Synapse Deck Maker</h1>
+    <p class="tagline">Paste your notes. Get a deck for your Synapse.</p>
+
+    <label for="deckName">Deck name</label>
+    <input id="deckName" type="text" placeholder="e.g. Electronics">
+
+    <label for="notes">Your notes</label>
+    <textarea id="notes" rows="8" placeholder="Paste your reviewer or notes here..."></textarea>
+
+    <button id="generateBtn">Generate deck</button>
+
+    <section id="preview"></section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
