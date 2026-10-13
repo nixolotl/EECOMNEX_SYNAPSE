@@ -18,13 +18,15 @@
     <label for="notes">Your notes</label>
     <textarea id="notes" rows="8" placeholder="Paste your reviewer or notes here..."></textarea>
 
+    <button id="generateBtn">Generate deck automatically</button>
+    <p id="genMsg" class="msg"></p>
+
+    <h2>Or: use any AI chat yourself</h2>
+    <p class="tagline">Copy the prompt, paste it into an AI chat, then paste its answer below.</p>
     <button id="copyPromptBtn">Copy prompt for AI</button>
     <p id="copyMsg" class="msg"></p>
 
-    <h2>Step 2: Paste the AI's answer</h2>
-    <p class="tagline">Open any AI chat, paste the prompt, then paste its answer below.</p>
     <textarea id="aiReply" rows="6" placeholder="Paste the JSON the AI gives you..."></textarea>
-
     <button id="loadDeckBtn">Load deck</button>
     <p id="loadMsg" class="msg"></p>
 
