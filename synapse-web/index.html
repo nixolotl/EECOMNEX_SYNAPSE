@@ -11,13 +11,22 @@
     <h1>Synapse Deck Maker</h1>
     <p class="tagline">Paste your notes. Get a deck for your Synapse.</p>
 
+    <h2>Step 1: Your notes</h2>
     <label for="deckName">Deck name</label>
     <input id="deckName" type="text" placeholder="e.g. Electronics">
 
     <label for="notes">Your notes</label>
     <textarea id="notes" rows="8" placeholder="Paste your reviewer or notes here..."></textarea>
 
-    <button id="generateBtn">Generate deck</button>
+    <button id="copyPromptBtn">Copy prompt for AI</button>
+    <p id="copyMsg" class="msg"></p>
+
+    <h2>Step 2: Paste the AI's answer</h2>
+    <p class="tagline">Open any AI chat, paste the prompt, then paste its answer below.</p>
+    <textarea id="aiReply" rows="6" placeholder="Paste the JSON the AI gives you..."></textarea>
+
+    <button id="loadDeckBtn">Load deck</button>
+    <p id="loadMsg" class="msg"></p>
 
     <section id="preview"></section>
   </main>

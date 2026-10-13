@@ -56,3 +56,5 @@
   .card .q { font-weight: bold; }
   .card .a { color: var(--accent); margin-top: 6px; }
   .card .w { color: var(--dim); font-size: 0.9rem; margin-top: 6px; }
+  h2 { margin-top: 32px; }
+.msg { color: var(--accent); min-height: 1.2em; }
