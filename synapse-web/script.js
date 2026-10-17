@@ -198,6 +198,11 @@ function setupNavigation() {
     switchView("home");
   });
 
+  document.getElementById("headerBrandLink")?.addEventListener("click", (e) => {
+    e.preventDefault();
+    switchView("home");
+  });
+
   document.getElementById("btnBackToDecks")?.addEventListener("click", () => {
     switchView("home");
   });
