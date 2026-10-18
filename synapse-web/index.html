@@ -6,32 +6,67 @@
   <title>Synapse Deck Maker</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body id="top">
+
+  <!-- Top bar: click the logo to go back to the top of the page -->
+  <header class="topbar">
+    <a class="logo" href="#top" aria-label="Synapse - back to top">
+      <span class="logo-word">SYNAPSE</span>
+      <span class="logo-tag">wired for attention</span>
+    </a>
+    <!--
+      To use your real logo picture instead of the text logo:
+      1. Save it in this folder as logo.png
+      2. Replace everything inside <a class="logo"> ... </a> with:
+         <img src="logo.png" alt="Synapse" class="logo-img">
+    -->
+  </header>
+
   <main>
-    <h1>Synapse Deck Maker</h1>
-    <p class="tagline">Paste your notes. Get a deck for your Synapse.</p>
+    <section class="hero">
+      <h1>Deck Maker</h1>
+      <p class="lead">Paste your notes. Get a deck for your Synapse.</p>
+    </section>
 
-    <h2>Step 1: Your notes</h2>
-    <label for="deckName">Deck name</label>
-    <input id="deckName" type="text" placeholder="e.g. Electronics">
+    <section class="panel">
+      <h2><span class="step">1</span> Your notes</h2>
+      <label for="deckName">Deck name</label>
+      <input id="deckName" type="text" placeholder="e.g. Electronics">
 
-    <label for="notes">Your notes</label>
-    <textarea id="notes" rows="8" placeholder="Paste your reviewer or notes here..."></textarea>
+      <label for="notes">Your notes</label>
+      <textarea id="notes" rows="8" placeholder="Paste your reviewer or notes here..."></textarea>
 
-    <button id="generateBtn">Generate deck automatically</button>
-    <p id="genMsg" class="msg"></p>
+      <button id="generateBtn">Generate deck automatically</button>
+      <p id="genMsg" class="msg"></p>
+    </section>
 
-    <h2>Or: use any AI chat yourself</h2>
-    <p class="tagline">Copy the prompt, paste it into an AI chat, then paste its answer below.</p>
-    <button id="copyPromptBtn">Copy prompt for AI</button>
-    <p id="copyMsg" class="msg"></p>
+    <section class="panel">
+      <h2><span class="step">2</span> Saved decks</h2>
+      <p class="tagline">Every deck you make is saved here. The Synapse can sync these.</p>
+      <div id="savedList"></div>
+      <p id="savedMsg" class="msg"></p>
+    </section>
 
-    <textarea id="aiReply" rows="6" placeholder="Paste the JSON the AI gives you..."></textarea>
-    <button id="loadDeckBtn">Load deck</button>
-    <p id="loadMsg" class="msg"></p>
+    <section class="panel">
+      <h2><span class="step">+</span> Or: use any AI chat yourself</h2>
+      <p class="tagline">Copy the prompt, paste it into an AI chat, then paste its answer below.</p>
+      <button id="copyPromptBtn">Copy prompt for AI</button>
+      <p id="copyMsg" class="msg"></p>
+
+      <textarea id="aiReply" rows="6" placeholder="Paste the JSON the AI gives you..."></textarea>
+      <button id="loadDeckBtn">Load deck</button>
+      <p id="loadMsg" class="msg"></p>
+
+      <button id="downloadBtn" style="display:none">Download deck file</button>
+    </section>
 
     <section id="preview"></section>
   </main>
+
+  <footer class="footer">
+    <p><strong>Synapse</strong> &middot; wired for attention</p>
+    <p class="footer-small">by EECOMNEX</p>
+  </footer>
 
   <script src="script.js"></script>
 </body>

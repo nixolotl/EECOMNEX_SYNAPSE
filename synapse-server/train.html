@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Synapse Prediction Model</title>
+<style>
+  :root {
+    --bg: #f5f7fb;  --card: #ffffff;  --line: #d9dfec;
+    --text: #0b1020; --dim: #5b6475;
+    --accent: #0077b6; --on-accent: #ffffff;
+    --good: #1e9e5a; --bad: #d93636; --warn: #b86a00;
+    --bar-bg: #e8ecf5;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #0b1020;  --card: #16203a;  --line: #26335a;
+      --text: #ffffff; --dim: #9aa3b8;
+      --accent: #00e5ff; --on-accent: #0b1020;
+      --good: #2ecc71; --bad: #ff4d4d; --warn: #ff9f1c;
+      --bar-bg: #0f1730;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 28px 16px 64px; }
+  h1 { font-size: 1.6rem; margin: 0 0 2px; letter-spacing: .01em; }
+  .tag { color: var(--accent); font-weight: 600; font-size: .9rem; margin: 0 0 6px; }
+  .lead { color: var(--dim); margin: 0 0 24px; max-width: 62ch; }
+  section {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 20px; margin-bottom: 16px;
+  }
+  h2 { font-size: 1.05rem; margin: 0 0 4px; }
+  h2 span {
+    display: inline-block; width: 24px; height: 24px; line-height: 24px; text-align: center;
+    border-radius: 50%; background: var(--accent); color: var(--on-accent);
+    font-size: .8rem; margin-right: 8px; font-weight: 700;
+  }
+  .sub { color: var(--dim); margin: 0 0 14px; font-size: .92rem; }
+
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-bottom: 14px; }
+  .tile { background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+  .tile .n { font-size: 1.6rem; font-weight: 700; line-height: 1.2; font-variant-numeric: tabular-nums; }
+  .tile .l { color: var(--dim); font-size: .82rem; }
+  .tile .vs { color: var(--dim); font-size: .82rem; margin-top: 2px; }
+
+  .row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  label { font-size: .9rem; color: var(--dim); }
+  input, select {
+    font: inherit; color: var(--text); background: var(--bg);
+    border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px;
+  }
+  input[type=number] { width: 86px; }
+  button {
+    font: inherit; font-weight: 600; cursor: pointer; border-radius: 8px; padding: 9px 16px;
+    border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent);
+  }
+  button.ghost { background: transparent; color: var(--accent); }
+  button:disabled { opacity: .5; cursor: wait; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  #status { min-height: 1.4em; margin: 12px 0 0; font-size: .92rem; }
+  #status.err { color: var(--bad); }
+  #status.ok { color: var(--good); }
+
+  .banner {
+    border-left: 4px solid var(--warn); background: var(--bg); border-radius: 6px;
+    padding: 10px 12px; margin: 0 0 14px; font-size: .92rem;
+  }
+  .verdict { font-size: 1.05rem; margin: 0 0 14px; }
+
+  table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  th, td { text-align: left; padding: 9px 6px; border-bottom: 1px solid var(--line); font-size: .92rem; vertical-align: middle; }
+  th { color: var(--dim); font-weight: 600; font-size: .8rem; }
+  td.num { font-variant-numeric: tabular-nums; font-family: ui-monospace, Consolas, monospace; white-space: nowrap; }
+  .barcell { width: 42%; }
+  .bar { position: relative; height: 12px; background: var(--bar-bg); border-radius: 6px; }
+  .bar::after { content: ""; position: absolute; left: 50%; top: -2px; bottom: -2px; width: 1px; background: var(--dim); }
+  .bar i { position: absolute; top: 0; bottom: 0; border-radius: 6px; }
+  .pos i { background: var(--good); left: 50%; }
+  .neg i { background: var(--bad); right: 50%; }
+
+  ul.learn { padding-left: 20px; margin: 8px 0 0; }
+  ul.learn li { margin-bottom: 6px; }
+  code.formula {
+    display: block; background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    padding: 10px 12px; font-size: .88rem; overflow-x: auto; white-space: pre; margin-top: 10px;
+  }
+  .note { color: var(--dim); font-size: .85rem; margin-top: 12px; }
+  .hidden { display: none; }
+  @media (max-width: 520px) { .barcell { display: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <p class="tag">Wired for Retention.</p>
+  <h1>Synapse prediction model</h1>
+  <p class="lead">Learns from review history which cards a student is most likely to forget. Offline, the device uses a simple formula; here the website learns better weights for that formula.</p>
+
+  <section aria-labelledby="h-data">
+    <h2 id="h-data"><span>1</span>Review data</h2>
+    <p class="sub">Answers sent by the device (Sync Decks) plus optional simulated students.</p>
+    <div class="tiles">
+      <div class="tile"><div class="n" id="t-total">0</div><div class="l">answers in total</div></div>
+      <div class="tile"><div class="n" id="t-device">0</div><div class="l">from the real device</div></div>
+      <div class="tile"><div class="n" id="t-sim">0</div><div class="l">simulated</div></div>
+    </div>
+    <div class="row">
+      <label for="students">Simulated students</label>
+      <input id="students" type="number" min="5" max="200" value="40">
+      <button id="btn-sim">Generate simulated students</button>
+      <button id="btn-clear" class="ghost">Remove simulated data</button>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-train">
+    <h2 id="h-train"><span>2</span>Train</h2>
+    <p class="sub">The model learns from 80% of the answers and is tested on the other 20% it has never seen.</p>
+    <div class="row">
+      <label for="source">Learn from</label>
+      <select id="source">
+        <option value="all">All data</option>
+        <option value="sim">Simulated only</option>
+        <option value="device">Real device only</option>
+      </select>
+      <button id="btn-train">Train model</button>
+    </div>
+    <p id="status" role="status" aria-live="polite"></p>
+  </section>
+
+  <section id="result" class="hidden" aria-labelledby="h-result">
+    <h2 id="h-result"><span>3</span>What it learned</h2>
+    <div id="banner"></div>
+    <p class="verdict" id="verdict"></p>
+
+    <div class="tiles">
+      <div class="tile"><div class="n" id="m-acc">-</div><div class="l">right calls on new answers</div><div class="vs" id="m-acc-vs"></div></div>
+      <div class="tile"><div class="n" id="m-auc">-</div><div class="l">ranking score (AUC)</div><div class="vs" id="m-auc-vs"></div></div>
+      <div class="tile"><div class="n" id="m-rows">-</div><div class="l">answers used</div><div class="vs" id="m-rows-vs"></div></div>
+    </div>
+
+    <table>
+      <thead><tr><th>Input</th><th class="barcell">Effect on "gets it right"</th><th>Weight</th></tr></thead>
+      <tbody id="weights"></tbody>
+    </table>
+
+    <ul class="learn" id="learn"></ul>
+    <code class="formula" id="formula"></code>
+    <p class="note" id="trained-at"></p>
+  </section>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const LABELS = {
+  b0: "Starting point",
+  accuracy: "Past accuracy",
+  gap: "Time since last seen",
+  lastWrong: "Last answer was wrong",
+  streak: "Right-answer streak"
+};
+
+async function api(path, options) {
+  const res = await fetch(path, Object.assign({ headers: { "Content-Type": "application/json" } }, options));
+  let data = {};
+  try { data = await res.json(); } catch (e) { /* no body */ }
+  if (!res.ok) throw new Error(data.error || ("Server error " + res.status));
+  return data;
+}
+
+function setStatus(text, kind) {
+  const el = $("status");
+  el.textContent = text || "";
+  el.className = kind || "";
+}
+
+function busy(on) {
+  for (const id of ["btn-sim", "btn-clear", "btn-train"]) $(id).disabled = on;
+}
+
+async function refreshCounts() {
+  const s = await api("/api/log/summary");
+  $("t-total").textContent = s.total;
+  $("t-device").textContent = s.fromDevice;
+  $("t-sim").textContent = s.simulated;
+}
+
+const pct = (v) => (v == null ? "-" : (v * 100).toFixed(1) + "%");
+
+function render(m) {
+  if (!m || !m.trained) { $("result").classList.add("hidden"); return; }
+  $("result").classList.remove("hidden");
+
+  // --- warnings about the data ---
+  const notes = [];
+  if (m.data.simulated) {
+    notes.push("Part of this data is simulated. The simulated students follow a forgetting rule we wrote ourselves, so these numbers show that the pipeline works, not that real students behave this way. Real validation comes from device data.");
+  }
+  if (!m.data.simulated && m.rows.used < 300) {
+    notes.push("Only " + m.rows.used + " real answers were used. Treat this as a preview; the weights will change as more answers arrive.");
+  }
+  $("banner").innerHTML = "";
+  for (const t of notes) {
+    const p = document.createElement("p");
+    p.className = "banner";
+    p.textContent = t;
+    $("banner").appendChild(p);
+  }
+
+  // --- headline numbers ---
+  const k = m.metrics;
+  const diff = (k.auc != null && k.handFormulaAuc != null) ? k.auc - k.handFormulaAuc : null;
+  let compare = "";
+  if (diff != null) {
+    if (diff > 0.02) compare = "a little better than the hand-made formula";
+    else if (diff >= -0.01) compare = "about the same as the hand-made formula";
+    else compare = "not better than the hand-made formula";
+  }
+  $("verdict").textContent =
+    "On answers it had never seen, the model made the right call " + pct(k.accuracy) +
+    " of the time, against " + pct(k.baselineAccuracy) + " for always guessing the usual result" +
+    (compare ? ", and ranks forgotten cards " + compare + "." : ".");
+
+  $("m-acc").textContent = pct(k.accuracy);
+  $("m-acc-vs").textContent = "guessing: " + pct(k.baselineAccuracy);
+  $("m-auc").textContent = k.auc == null ? "-" : k.auc.toFixed(2);
+  $("m-auc-vs").textContent = "hand formula: " + (k.handFormulaAuc == null ? "-" : k.handFormulaAuc.toFixed(2)) + " (0.5 = coin flip)";
+  $("m-rows").textContent = m.rows.used;
+  $("m-rows-vs").textContent = k.testRows + " kept for testing";
+
+  // --- weights table with bars ---
+  const w = m.weights;
+  const keys = ["accuracy", "gap", "lastWrong", "streak"];
+  const maxAbs = Math.max(0.001, ...keys.map((x) => Math.abs(w[x])));
+  const body = $("weights");
+  body.innerHTML = "";
+  const addRow = (key, withBar) => {
+    const tr = document.createElement("tr");
+    const name = document.createElement("td"); name.textContent = LABELS[key];
+    const bar = document.createElement("td"); bar.className = "barcell";
+    if (withBar) {
+      const v = w[key];
+      const holder = document.createElement("div");
+      holder.className = "bar " + (v >= 0 ? "pos" : "neg");
+      const fill = document.createElement("i");
+      fill.style.width = (Math.abs(v) / maxAbs * 50) + "%";
+      holder.appendChild(fill);
+      bar.appendChild(holder);
+    }
+    const num = document.createElement("td"); num.className = "num";
+    num.textContent = (w[key] >= 0 ? "+" : "") + w[key].toFixed(3);
+    tr.append(name, bar, num);
+    body.appendChild(tr);
+  };
+  keys.forEach((x) => addRow(x, true));
+  addRow("b0", false);
+
+  // --- plain-language reading of the weights ---
+  const learn = $("learn");
+  learn.innerHTML = "";
+  const add = (t) => { const li = document.createElement("li"); li.textContent = t; learn.appendChild(li); };
+  add(w.accuracy > 0
+    ? "Cards the student usually gets right are more likely to be right again."
+    : "Past accuracy did not predict a right answer in this data.");
+  add(w.gap < 0
+    ? "The longer it has been since a card was seen, the more likely it is to be forgotten."
+    : "A longer gap did not make forgetting more likely in this data.");
+  add(w.streak > 0
+    ? "A run of right answers makes a card safer."
+    : "A streak of right answers did not make a card safer in this data.");
+  add("\"Last answer was wrong\" overlaps with the streak (a wrong answer resets the streak to 0), so its weight is small and should be read together with the streak, not on its own.");
+
+  $("formula").textContent =
+    "z = " + w.b0.toFixed(3) + " + " + w.accuracy.toFixed(3) + " x accuracy " +
+    (w.gap < 0 ? "- " : "+ ") + Math.abs(w.gap).toFixed(3) + " x gap " +
+    (w.lastWrong < 0 ? "- " : "+ ") + Math.abs(w.lastWrong).toFixed(3) + " x lastWrong " +
+    (w.streak < 0 ? "- " : "+ ") + Math.abs(w.streak).toFixed(3) + " x streak\n" +
+    "P(right) = 1 / (1 + e^-z)        forget risk = 1 - P(right)\n" +
+    "accuracy = right / seen,  gap = min(sessions since seen, 5) / 5,  streak = min(streak, 5) / 5";
+
+  $("trained-at").textContent = "Trained " + new Date(m.trainedAt).toLocaleString() + " on " + (
+    m.source === "all" ? "all data" : m.source === "sim" ? "simulated data only" : "real device data only") + ".";
+}
+
+async function run(label, work) {
+  busy(true);
+  setStatus(label + "...");
+  try {
+    const msg = await work();
+    try { await refreshCounts(); } catch (e) { /* ignore */ }   // update the numbers first
+    setStatus(msg || "", "ok");
+  } catch (e) {
+    setStatus(e.message, "err");
+  } finally {
+    busy(false);
+  }
+}
+
+$("btn-sim").onclick = () => run("Generating", async () => {
+  const n = parseInt($("students").value, 10) || 40;
+  const r = await api("/api/sim/generate", { method: "POST", body: JSON.stringify({ students: n }) });
+  return "Made " + r.generated + " simulated answers from " + r.students + " students.";
+});
+
+$("btn-clear").onclick = () => run("Removing", async () => {
+  await api("/api/sim", { method: "DELETE" });
+  return "Simulated data removed. Real device answers were kept.";
+});
+
+$("btn-train").onclick = () => run("Training", async () => {
+  const m = await api("/api/model/train", { method: "POST", body: JSON.stringify({ source: $("source").value }) });
+  render(m);
+  return "Done. The model was trained and saved.";
+});
+
+(async function start() {
+  try { await refreshCounts(); render(await api("/api/model")); }
+  catch (e) { setStatus("Cannot reach the server. Is it running?", "err"); }
+})();
+</script>
+</body>
+</html>

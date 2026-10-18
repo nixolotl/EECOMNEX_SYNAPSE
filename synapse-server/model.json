@@ -1,0 +1,45 @@
+{
+  "trained": true,
+  "trainedAt": "2026-10-17T05:38:12.764Z",
+  "source": "all",
+  "data": {
+    "simulated": true,
+    "device": true,
+    "answers": 4391
+  },
+  "features": [
+    "accuracy",
+    "gap",
+    "lastWrong",
+    "streak"
+  ],
+  "weights": {
+    "b0": -1.0304,
+    "accuracy": 2.124,
+    "gap": -1.4591,
+    "lastWrong": 0.5431,
+    "streak": 2.2112
+  },
+  "w": [
+    -1.030413,
+    2.124019,
+    -1.45911,
+    0.543065,
+    2.211229
+  ],
+  "metrics": {
+    "testRows": 783,
+    "accuracy": 0.7701,
+    "baselineAccuracy": 0.6488,
+    "auc": 0.8189,
+    "handFormulaAuc": 0.8016,
+    "logLoss": 0.4922
+  },
+  "rows": {
+    "used": 3911,
+    "train": 3128,
+    "test": 783,
+    "skippedFirstTime": 480,
+    "rightRate": 0.6551
+  }
+}

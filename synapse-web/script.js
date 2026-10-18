@@ -1,10 +1,19 @@
-const copyPromptBtn = document.getElementById("copyPromptBtn");
-const loadDeckBtn = document.getElementById("loadDeckBtn");
-const copyMsg = document.getElementById("copyMsg");
-const loadMsg = document.getElementById("loadMsg");
-const preview = document.getElementById("preview");
+const SERVER = "http://localhost:3000";
 
-// Builds the instructions we send to the AI.
+let currentDeck = null;
+
+const generateBtn = document.getElementById("generateBtn");
+const genMsg = document.getElementById("genMsg");
+const copyPromptBtn = document.getElementById("copyPromptBtn");
+const copyMsg = document.getElementById("copyMsg");
+const loadDeckBtn = document.getElementById("loadDeckBtn");
+const loadMsg = document.getElementById("loadMsg");
+const downloadBtn = document.getElementById("downloadBtn");
+const preview = document.getElementById("preview");
+const savedList = document.getElementById("savedList");
+const savedMsg = document.getElementById("savedMsg");
+
+// Builds the instructions we send to the AI (backup flow).
 // The length limits match what fits on the Synapse screen.
 function buildPrompt(name, notes) {
   return `You are making a flashcard deck for a small handheld study device.
@@ -28,38 +37,18 @@ NOTES:
 ${notes}`;
 }
 
-copyPromptBtn.addEventListener("click", async () => {
-  const name = document.getElementById("deckName").value.trim();
-  const notes = document.getElementById("notes").value.trim();
-
-  if (!notes) {
-    copyMsg.textContent = "Paste your notes first.";
-    return;
-  }
-
-  try {
-    await navigator.clipboard.writeText(buildPrompt(name, notes));
-    copyMsg.textContent = "Prompt copied! Paste it into an AI chat.";
-  } catch (err) {
-    copyMsg.textContent = "Could not copy. Try again.";
-  }
-});
-
 // Turns the AI's text into a deck, or returns an error message.
 function parseDeck(text) {
-  // Remove ```json fences in case the AI added them
   let clean = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/, "").trim();
 
-  // Keep only the part from the first { to the last }
   const start = clean.indexOf("{");
   const end = clean.lastIndexOf("}");
   if (start !== -1 && end !== -1) clean = clean.slice(start, end + 1);
 
-  // Fix line breaks and curly quotes that copying can add
   clean = clean
     .replace(/\s*[\r\n]+\s*/g, " ")
-    .replace(/[\u201C\u201D]/g, '"')
-    .replace(/[\u2018\u2019]/g, "'");
+    .replace(/[“”]/g, '"')
+    .replace(/[‘’]/g, "'");
 
   let deck;
   try {
@@ -87,6 +76,9 @@ function addLine(parent, className, text) {
 }
 
 function showDeck(deck) {
+  currentDeck = deck;
+  downloadBtn.style.display = "inline-block";
+
   preview.innerHTML = "";
   const title = document.createElement("h2");
   title.textContent = `${deck.name || "My Deck"} (${deck.cards.length} cards)`;
@@ -102,21 +94,76 @@ function showDeck(deck) {
   });
 }
 
-loadDeckBtn.addEventListener("click", () => {
-  const text = document.getElementById("aiReply").value;
-  const result = parseDeck(text);
+function downloadDeck(deck) {
+  const fileName =
+    (deck.name || "deck").toLowerCase().replace(/[^a-z0-9]+/g, "-") + ".json";
+  const blob = new Blob([JSON.stringify(deck, null, 2)], { type: "application/json" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = fileName;
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
 
-  if (result.error) {
-    loadMsg.textContent = result.error;
-    preview.innerHTML = "";
-    return;
+// ---------- Saved decks (kept by the server) ----------
+function makeButton(text, onClick) {
+  const b = document.createElement("button");
+  b.textContent = text;
+  b.className = "small";
+  b.addEventListener("click", onClick);
+  return b;
+}
+
+async function loadSavedDecks() {
+  savedList.innerHTML = "";
+  try {
+    const response = await fetch(SERVER + "/api/decks");
+    const list = await response.json();
+
+    if (list.length === 0) {
+      savedMsg.textContent = "No saved decks yet. Generate one above.";
+      return;
+    }
+    savedMsg.textContent = "";
+
+    list.forEach((d) => {
+      const row = document.createElement("div");
+      row.className = "card row";
+
+      const label = document.createElement("div");
+      label.className = "q";
+      label.textContent = `${d.name} (${d.cards} cards)`;
+      row.appendChild(label);
+
+      const buttons = document.createElement("div");
+      buttons.className = "buttons";
+
+      buttons.appendChild(makeButton("Open", async () => {
+        const r = await fetch(SERVER + "/api/decks/" + d.id);
+        showDeck(await r.json());
+        preview.scrollIntoView({ behavior: "smooth" });
+      }));
+
+      buttons.appendChild(makeButton("Download", async () => {
+        const r = await fetch(SERVER + "/api/decks/" + d.id);
+        downloadDeck(await r.json());
+      }));
+
+      buttons.appendChild(makeButton("Delete", async () => {
+        if (!confirm(`Delete "${d.name}" from the server?`)) return;
+        await fetch(SERVER + "/api/decks/" + d.id, { method: "DELETE" });
+        loadSavedDecks();
+      }));
+
+      row.appendChild(buttons);
+      savedList.appendChild(row);
+    });
+  } catch (err) {
+    savedMsg.textContent = "Could not reach the server. Is it running?";
   }
-  loadMsg.textContent = "Deck loaded.";
-  showDeck(result.deck);
-});
-const generateBtn = document.getElementById("generateBtn");
-const genMsg = document.getElementById("genMsg");
+}
 
+// ---------- Automatic: ask our server, which asks the AI ----------
 generateBtn.addEventListener("click", async () => {
   const name = document.getElementById("deckName").value.trim();
   const notes = document.getElementById("notes").value.trim();
@@ -131,7 +178,7 @@ generateBtn.addEventListener("click", async () => {
   preview.innerHTML = "";
 
   try {
-    const response = await fetch("http://localhost:3000/api/generate", {
+    const response = await fetch(SERVER + "/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, notes })
@@ -141,11 +188,63 @@ generateBtn.addEventListener("click", async () => {
     if (!response.ok) {
       genMsg.textContent = data.error || "Something went wrong.";
     } else {
-      genMsg.textContent = "Deck ready.";
+      genMsg.textContent = "Deck ready and saved.";
       showDeck(data);
+      loadSavedDecks();
     }
   } catch (err) {
     genMsg.textContent = "Could not reach the server. Is it running?";
   }
   generateBtn.disabled = false;
 });
+
+// ---------- Backup: copy a prompt, paste the AI's answer ----------
+copyPromptBtn.addEventListener("click", async () => {
+  const name = document.getElementById("deckName").value.trim();
+  const notes = document.getElementById("notes").value.trim();
+
+  if (!notes) {
+    copyMsg.textContent = "Paste your notes first.";
+    return;
+  }
+
+  try {
+    await navigator.clipboard.writeText(buildPrompt(name, notes));
+    copyMsg.textContent = "Prompt copied! Paste it into an AI chat.";
+  } catch (err) {
+    copyMsg.textContent = "Could not copy. Try again.";
+  }
+});
+
+loadDeckBtn.addEventListener("click", async () => {
+  const text = document.getElementById("aiReply").value;
+  const result = parseDeck(text);
+
+  if (result.error) {
+    loadMsg.textContent = result.error;
+    preview.innerHTML = "";
+    return;
+  }
+  showDeck(result.deck);
+
+  // Also save it on the server so the Synapse can sync it later
+  try {
+    const response = await fetch(SERVER + "/api/decks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(result.deck)
+    });
+    loadMsg.textContent = response.ok ? "Deck loaded and saved." : "Deck loaded (not saved on the server).";
+    loadSavedDecks();
+  } catch (err) {
+    loadMsg.textContent = "Deck loaded (server not reachable, so not saved).";
+  }
+});
+
+// ---------- Download the deck as a .json file ----------
+downloadBtn.addEventListener("click", () => {
+  if (currentDeck) downloadDeck(currentDeck);
+});
+
+// Show the saved decks when the page opens
+loadSavedDecks();
