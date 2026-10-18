@@ -4,69 +4,479 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Synapse Deck Maker</title>
+  <meta name="description" content="Paste your notes. Get a deck for your Synapse handheld study device. Wired for attention by EECOMNEX.">
+  <link rel="icon" type="image/png" href="assets/logo.png">
+
+  <!-- Google Fonts: Space Grotesk & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="style.css">
+
+  <!-- Client-side Mammoth.js for Word .docx document extraction -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
 </head>
-<body id="top">
+<body>
+  <div class="app-container">
+    <!-- Desktop Left Sidebar -->
+    <aside class="sidebar">
+      <a href="#" class="sidebar-logo" id="sidebarLogo" title="EECOMNEX">
+        <img src="assets/logo.png" alt="EECOMNEX Logo" class="sidebar-logo-img">
+      </a>
+      <div class="sidebar-divider"></div>
 
-  <!-- Top bar: click the logo to go back to the top of the page -->
-  <header class="topbar">
-    <a class="logo" href="#top" aria-label="Synapse - back to top">
-      <span class="logo-word">SYNAPSE</span>
-      <span class="logo-tag">wired for attention</span>
-    </a>
-    <!--
-      To use your real logo picture instead of the text logo:
-      1. Save it in this folder as logo.png
-      2. Replace everything inside <a class="logo"> ... </a> with:
-         <img src="logo.png" alt="Synapse" class="logo-img">
-    -->
-  </header>
+      <!-- Navigation buttons -->
+      <button class="sidebar-btn active" id="navHomeBtn" title="Home">
+        <span class="active-indicator"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </button>
 
-  <main>
-    <section class="hero">
-      <h1>Deck Maker</h1>
-      <p class="lead">Paste your notes. Get a deck for your Synapse.</p>
-    </section>
+      <button class="sidebar-btn" id="navHistoryBtn" title="History">
+        <span class="active-indicator"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+      </button>
 
-    <section class="panel">
-      <h2><span class="step">1</span> Your notes</h2>
-      <label for="deckName">Deck name</label>
-      <input id="deckName" type="text" placeholder="e.g. Electronics">
+      <button class="sidebar-btn" id="navSettingsBtn" title="Settings">
+        <span class="active-indicator"></span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+      </button>
+    </aside>
 
-      <label for="notes">Your notes</label>
-      <textarea id="notes" rows="8" placeholder="Paste your reviewer or notes here..."></textarea>
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+      <!-- Header -->
+      <header class="top-header">
+        <div class="header-content">
+          <div class="brand-section">
+            <a href="#" class="brand-link" id="headerBrandLink" aria-label="Synapse · wired for attention">
+              <img src="assets/synapse-wordmark-transparent.png" alt="SYNAPSE" class="brand-wordmark-img">
+              <span class="brand-tagline">wired for attention</span>
+              <h1 class="sr-only">Synapse · wired for attention</h1>
+            </a>
+          </div>
+          <div class="header-actions">
+            <div class="badge-en">EN</div>
+            <div class="avatar-badge" title="User Account"></div>
+          </div>
+        </div>
+        <div class="header-accent-line"></div>
+      </header>
 
-      <button id="generateBtn">Generate deck automatically</button>
-      <p id="genMsg" class="msg"></p>
-    </section>
+      <!-- Content Canvas -->
+      <main class="content-canvas">
+        <div class="content-container">
 
-    <section class="panel">
-      <h2><span class="step">2</span> Saved decks</h2>
-      <p class="tagline">Every deck you make is saved here. The Synapse can sync these.</p>
-      <div id="savedList"></div>
-      <p id="savedMsg" class="msg"></p>
-    </section>
+          <!-- ================= VIEW 1: HOME ================= -->
+          <div id="viewHome" class="view-panel">
+            <!-- Step 1: Your Notes -->
+            <section class="syn-card">
+              <div class="card-header">
+                <span class="step-badge">1</span>
+                <div>
+                  <h2 class="card-title">Your notes</h2>
+                  <p class="card-subtitle">Paste your notes. Get a deck for your Synapse.</p>
+                </div>
+              </div>
 
-    <section class="panel">
-      <h2><span class="step">+</span> Or: use any AI chat yourself</h2>
-      <p class="tagline">Copy the prompt, paste it into an AI chat, then paste its answer below.</p>
-      <button id="copyPromptBtn">Copy prompt for AI</button>
-      <p id="copyMsg" class="msg"></p>
+              <div class="form-group">
+                <label for="deckName" class="form-label">Deck name</label>
+                <input id="deckName" type="text" class="form-input" placeholder="e.g. Electronics">
+              </div>
 
-      <textarea id="aiReply" rows="6" placeholder="Paste the JSON the AI gives you..."></textarea>
-      <button id="loadDeckBtn">Load deck</button>
-      <p id="loadMsg" class="msg"></p>
+              <!-- Docx Upload Dropzone -->
+              <div class="form-group">
+                <label class="form-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                  Or upload a Word document
+                </label>
+                <input type="file" id="docxInput" class="hidden" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.txt">
+                
+                <div class="upload-dropzone" id="dropzone">
+                  <div class="upload-icon-box" id="dropzoneIconBox">
+                    <svg id="uploadIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="17 8 12 3 7 8"/>
+                      <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                    <svg id="uploadSpinner" class="spin hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="12" y1="2" x2="12" y2="6"/>
+                      <line x1="12" y1="18" x2="12" y2="22"/>
+                      <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
+                      <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
+                      <line x1="2" y1="12" x2="6" y2="12"/>
+                      <line x1="18" y1="12" x2="22" y2="12"/>
+                      <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
+                      <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="upload-title" id="uploadTitleText">Click or drop a .docx or .txt file</span>
+                    <span class="upload-desc" id="uploadDescText">Text will be extracted into the notes field below</span>
+                  </div>
+                </div>
+                <div id="uploadMsg" class="msg-banner"></div>
+              </div>
 
-      <button id="downloadBtn" style="display:none">Download deck file</button>
-    </section>
+              <!-- Notes Input -->
+              <div class="form-group">
+                <label for="notes" class="form-label">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="8" y1="6" x2="21" y2="6"/>
+                    <line x1="8" y1="12" x2="21" y2="12"/>
+                    <line x1="8" y1="18" x2="21" y2="18"/>
+                    <line x1="3" y1="6" x2="3.01" y2="6"/>
+                    <line x1="3" y1="12" x2="3.01" y2="12"/>
+                    <line x1="3" y1="18" x2="3.01" y2="18"/>
+                  </svg>
+                  Your notes
+                </label>
+                <textarea id="notes" class="form-textarea" rows="7" placeholder="Paste your reviewer or notes here..."></textarea>
+              </div>
 
-    <section id="preview"></section>
-  </main>
+              <!-- Generate Button -->
+              <button id="generateBtn" class="btn-primary">
+                <svg class="btn-icon-hover" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+                </svg>
+                <span id="genBtnText">Generate deck automatically</span>
+              </button>
+              <div id="genMsg" class="msg-banner"></div>
+            </section>
 
-  <footer class="footer">
-    <p><strong>Synapse</strong> &middot; wired for attention</p>
-    <p class="footer-small">by EECOMNEX</p>
-  </footer>
+            <!-- Step 2: Saved Decks -->
+            <section class="syn-card" style="margin-top: 1.25rem;">
+              <div class="card-header">
+                <span class="step-badge">2</span>
+                <div>
+                  <h2 class="card-title" id="savedDecksHeading">0 Saved decks</h2>
+                  <p class="card-subtitle">Every deck you make is saved here. The Synapse can sync these.</p>
+                </div>
+              </div>
+
+              <div id="savedDecksList" class="decks-list">
+                <!-- Dynamically populated -->
+              </div>
+            </section>
+
+            <!-- Step 3: Or use any AI chat yourself -->
+            <section class="syn-card" style="margin-top: 1.25rem;">
+              <div class="card-header">
+                <span class="step-badge">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="4 17 10 11 4 5"/>
+                    <line x1="12" y1="19" x2="20" y2="19"/>
+                  </svg>
+                </span>
+                <div>
+                  <h2 class="card-title">Or: use any AI chat yourself</h2>
+                  <p class="card-subtitle">Copy the prompt, paste it into an AI chat, then paste its answer below.</p>
+                </div>
+              </div>
+
+              <button id="copyPromptBtn" class="btn-primary" style="margin-bottom: 1rem; width: auto; align-self: flex-start;">
+                <svg id="copyPromptIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                </svg>
+                <span id="copyPromptText">Copy prompt for AI</span>
+              </button>
+              <div id="copyMsg" class="msg-banner"></div>
+
+              <div class="form-group">
+                <textarea id="aiReply" class="form-textarea code-mode" rows="6" placeholder="Paste the JSON the AI gives you..."></textarea>
+              </div>
+
+              <button id="loadDeckBtn" class="btn-primary">
+                <span>Load deck</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+              <div id="loadMsg" class="msg-banner"></div>
+            </section>
+
+            <!-- Card Preview Section (Populated on Load / Generate) -->
+            <section id="previewCardSection" class="syn-card hidden" style="margin-top: 1.25rem;">
+              <div class="card-header">
+                <span class="step-badge" style="background-color: hsl(var(--syn-teal-deep));">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"/>
+                  </svg>
+                </span>
+                <div style="flex: 1;">
+                  <h2 class="card-title" id="previewDeckTitle">Current Deck Preview</h2>
+                  <p class="card-subtitle">Formatted for your Synapse handheld hardware screen.</p>
+                </div>
+                <button id="btnStudyActiveDeck" class="btn-action-primary" style="padding: 0.6rem 1rem;">
+                  Study in 3D
+                </button>
+              </div>
+              <div id="preview" class="decks-list"></div>
+            </section>
+          </div>
+
+          <!-- ================= VIEW 2: 3D DECK STUDY ================= -->
+          <div id="viewDeck" class="view-panel hidden">
+            <!-- Study Header Nav -->
+            <div class="deck-view-header">
+              <button id="btnBackToDecks" class="btn-back">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12"/>
+                  <polyline points="12 19 5 12 12 5"/>
+                </svg>
+                Back to decks
+              </button>
+
+              <div class="deck-view-tools">
+                <button id="btnShuffleDeck" class="btn-tool" title="Shuffle cards">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="16 3 21 3 21 8"/>
+                    <line x1="4" y1="20" x2="21" y2="3"/>
+                    <polyline points="21 16 21 21 16 21"/>
+                    <line x1="15" y1="15" x2="21" y2="21"/>
+                    <line x1="4" y1="4" x2="9" y2="9"/>
+                  </svg>
+                </button>
+                <button id="btnResetDeck" class="btn-tool" title="Reset order">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="1 4 1 10 7 10"/>
+                    <path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- Title & Count -->
+            <div class="deck-view-title-wrap">
+              <h2 id="studyDeckTitle" class="deck-view-h2">Electronics</h2>
+              <p id="studyDeckSub" class="deck-view-sub">10 cards · tap a card to flip it</p>
+            </div>
+
+            <!-- Progress Track -->
+            <div class="progress-bar-wrap">
+              <div class="progress-labels">
+                <span id="studyProgressLabel">Card 1 of 10</span>
+                <span id="studyPercentLabel">10%</span>
+              </div>
+              <div class="progress-track">
+                <div id="studyProgressFill" class="progress-fill" style="width: 10%;"></div>
+              </div>
+            </div>
+
+            <!-- 3D Flashcard -->
+            <div id="flashcard3d" class="flashcard-3d-wrap">
+              <div id="flashcardInner" class="flashcard-inner">
+                <!-- Front (Question) -->
+                <div class="card-face front">
+                  <span class="face-badge question">Question</span>
+                  <p id="cardQuestionText" class="card-content-text">What is bandwidth?</p>
+                  <span class="face-hint">Click or press Space to flip</span>
+                </div>
+                <!-- Back (Answer) -->
+                <div class="card-face back">
+                  <span class="face-badge answer">Answer</span>
+                  <p id="cardAnswerText" class="card-content-text">The maximum rate of data transfer across a network path.</p>
+                  <div id="cardDistractors" class="card-distractors"></div>
+                  <span class="face-hint">Click or press Space to flip back</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Previous / Next Controls -->
+            <div class="study-controls">
+              <button id="btnStudyPrev" class="btn-study-prev">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="15 18 9 12 15 6"/>
+                </svg>
+                Previous
+              </button>
+              <button id="btnStudyNext" class="btn-study-next">
+                Next
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- ================= VIEW 3: HISTORY ================= -->
+          <div id="viewHistory" class="view-panel hidden">
+            <div class="card-header" style="margin-bottom: 1.25rem;">
+              <span class="step-badge">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+              </span>
+              <div>
+                <h2 class="card-title" style="color: #ffffff;">History</h2>
+                <p class="card-subtitle" style="color: rgba(255, 255, 255, 0.7);">Every deck you've generated, stored in one place.</p>
+              </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="search-wrapper">
+              <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/>
+                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+              </svg>
+              <input type="text" id="historySearchInput" class="search-input" placeholder="Search your decks by name…">
+              <button id="historySearchClear" class="search-clear hidden">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"/>
+                  <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- History Decks Card -->
+            <section class="syn-card">
+              <div id="historyDecksList" class="decks-list"></div>
+            </section>
+          </div>
+
+          <!-- ================= VIEW 4: SETTINGS ================= -->
+          <div id="viewSettings" class="view-panel hidden">
+            <section class="syn-card">
+              <h2 class="card-title" style="font-size: 1.35rem;">Settings</h2>
+              <p class="card-subtitle" style="margin-bottom: 1.5rem;">Manage your study preferences and app options.</p>
+
+              <!-- Study Preferences -->
+              <h3 class="settings-section-title">Study Preferences</h3>
+              
+              <div class="settings-item">
+                <div class="settings-info">
+                  <div class="settings-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="16 3 21 3 21 8"/>
+                      <line x1="4" y1="20" x2="21" y2="3"/>
+                      <polyline points="21 16 21 21 16 21"/>
+                      <line x1="15" y1="15" x2="21" y2="21"/>
+                      <line x1="4" y1="4" x2="9" y2="9"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="settings-title">Shuffle cards by default</span>
+                    <p class="settings-desc">Randomize card order when opening a deck</p>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="settingShuffle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="settings-item">
+                <div class="settings-info">
+                  <div class="settings-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                      <polyline points="17 21 17 13 7 13 7 21"/>
+                      <polyline points="7 3 7 8 15 8"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="settings-title">Auto-save generated decks</span>
+                    <p class="settings-desc">Store every deck you generate in History</p>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="settingAutoSave" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- Notifications -->
+              <h3 class="settings-section-title">Notifications</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <div class="settings-icon-box">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                      <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <span class="settings-title">Study reminders</span>
+                    <p class="settings-desc">Get reminded to review your decks</p>
+                  </div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="settingReminders" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <!-- About Section -->
+              <h3 class="settings-section-title">About</h3>
+              <div class="settings-item">
+                <div class="settings-info">
+                  <div class="settings-icon-box" style="overflow: hidden; padding: 2px;">
+                    <img src="assets/logo.png" alt="EECOMNEX" style="width: 100%; height: 100%; border-radius: 4px; object-fit: cover;">
+                  </div>
+                  <div>
+                    <span class="settings-title">Synapse · wired for attention</span>
+                    <p class="settings-desc">by EECOMNEX · v1.0.0</p>
+                  </div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color: hsl(var(--syn-ink-soft));">
+                  <polyline points="9 18 15 12 9 6"/>
+                </svg>
+              </div>
+            </section>
+          </div>
+
+          <!-- Footer -->
+          <footer class="syn-footer">
+            <p class="footer-tag">Synapse · wired for attention</p>
+            <p class="footer-credit">by EECOMNEX</p>
+          </footer>
+
+        </div>
+      </main>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <nav class="mobile-nav">
+      <button class="mobile-nav-btn active" id="mobHomeBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+        <span>Home</span>
+      </button>
+
+      <button class="mobile-nav-btn" id="mobHistoryBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <polyline points="12 6 12 12 16 14"/>
+        </svg>
+        <span>History</span>
+      </button>
+
+      <button class="mobile-nav-btn" id="mobSettingsBtn">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/>
+          <circle cx="12" cy="12" r="3"/>
+        </svg>
+        <span>Settings</span>
+      </button>
+    </nav>
+  </div>
 
   <script src="script.js"></script>
 </body>
