@@ -1,3 +1,4 @@
+require("dotenv").config({ path: require("path").join(__dirname, ".env") });
 const express = require("express");
 const cors = require("cors");
 const fs = require("fs");
@@ -10,6 +11,7 @@ app.use(express.json({ limit: "100kb" }));
 
 const MODEL = "gemini-3.1-flash-lite";
 const API_KEY = process.env.GEMINI_API_KEY;
+console.log("API key loaded:", !!API_KEY);
 
 const MAX_CARDS = 20;      // most cards one deck can hold (the device reads 20)
 const MORE_CARDS = 5;      // how many new cards one "more" request asks for
