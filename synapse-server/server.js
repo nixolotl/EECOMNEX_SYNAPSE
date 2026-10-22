@@ -5,12 +5,82 @@ const fs = require("fs");
 const path = require("path");
 const model = require("./model.js");   // NEW (Stage 4): simulation + training
 
+const multer = require("multer");
+const mammoth = require("mammoth");
+let pdfToImg;
+
+import("pdf-to-img").then((module) => {
+  pdfToImg = module.pdf;
+});
+
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: "100kb" }));
 
+// File uploads for PDF, TXT, and DOCX notes
+const upload = multer({
+  storage: multer.memoryStorage(),
+  limits: {
+    fileSize: 5 * 1024 * 1024 // Maximum 5 MB per file
+  },
+  fileFilter: (req, file, cb) => {
+    const allowedExtensions = [".pdf", ".txt", ".docx"];
+    const ext = path.extname(file.originalname).toLowerCase();
+
+    if (!allowedExtensions.includes(ext)) {
+      return cb(new Error("Only PDF, TXT, and DOCX files are allowed."));
+    }
+
+    cb(null, true);
+  }
+});
+
+app.use(express.static(path.join(__dirname, "../synapse-web")));
+
 const MODEL = "gemini-3.1-flash-lite";
 const API_KEY = process.env.GEMINI_API_KEY;
+async function recognizePdfPage(imageBuffer) {
+  const response = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "x-goog-api-key": API_KEY
+      },
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              {
+                text: "Extract all readable text from this document image, including handwritten text. Preserve the original wording as much as possible. Return only the extracted text. Do not summarize or invent missing words."
+              },
+              {
+                inline_data: {
+                  mime_type: "image/png",
+                  data: imageBuffer.toString("base64")
+                }
+              }
+            ]
+          }
+        ]
+      })
+    }
+  );
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error("Gemini image recognition error:", data);
+    throw new Error("Gemini could not recognize the PDF image.");
+  }
+
+  return (
+    data.candidates?.[0]?.content?.parts
+      ?.map((part) => part.text || "")
+      .join("\n") || ""
+  );
+}
 console.log("API key loaded:", !!API_KEY);
 
 const MAX_CARDS = 20;      // most cards one deck can hold (the device reads 20)
@@ -192,8 +262,101 @@ function sendError(res, err) {
 
 // ---------------- Routes ----------------
 
+
+ // ---------------- Routes ----------------
+
+// Upload and extract text from PDF, TXT, and DOCX files
+app.post("/api/upload", (req, res) => {
+  upload.single("file")(req, res, async (err) => {
+    if (err) {
+      return res.status(400).json({ error: err.message });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: "Please select a file first." });
+    }
+
+    try {
+      const ext = path.extname(req.file.originalname).toLowerCase();
+      let notes = "";
+
+      if (ext === ".txt") {
+        notes = req.file.buffer.toString("utf8");
+      } else if (ext === ".docx") {
+        const result = await mammoth.extractRawText({
+          buffer: req.file.buffer
+        });
+        notes = result.value;
+} else if (ext === ".pdf") {
+  const { PDFParse } = require("pdf-parse");
+  const parser = new PDFParse({
+    data: req.file.buffer
+  });
+
+  try {
+    const result = await parser.getText();
+    notes = result.text || "";
+  } finally {
+    await parser.destroy();
+  }
+
+
+  // Use Gemini if the PDF contains no extractable text.
+  if (!notes.replace(/--\s*\d+\s+of\s+\d+\s*--/gi, "").trim()) {
+    if (!pdfToImg) {
+      throw new Error("PDF image conversion is not ready yet.");
+    }
+
+    const document = await pdfToImg(req.file.buffer, {
+      scale: 1,
+      format: "png"
+    });
+
+    const pagesToRead = Math.min(document.length, 5);
+    const extractedPages = [];
+
+    for (let pageNumber = 1; pageNumber <= pagesToRead; pageNumber++) {
+      const imageBuffer = await document.getPage(pageNumber);
+      const pageText = await recognizePdfPage(imageBuffer);
+
+      if (pageText.trim()) {
+        extractedPages.push(pageText.trim());
+      }
+    }
+
+    notes = extractedPages.join("\n");
+  }
+
+}
+      notes = notes.replace(/\s+/g, " ").trim();
+
+      if (!notes) {
+        return res.status(400).json({
+          error: "No readable text was found. The PDF may be scanned or the document may be empty."
+        });
+      }
+
+      if (notes.length > 8000) {
+        notes = notes.slice(0, 8000);
+      }
+
+      res.json({
+        filename: req.file.originalname,
+        notes,
+        truncated: notes.length === 8000
+      });
+    } catch (error) {
+      console.error("File extraction error:", error);
+      res.status(400).json({
+        error: "Could not read this file. Please try another PDF, TXT, or DOCX file."
+      });
+    }
+  });
+});
+
 // Quick check that the server is running
 app.get("/api/ping", (req, res) => res.json({ ok: true }));
+
 
 // Make a new deck from notes, and save it
 app.post("/api/generate", async (req, res) => {
