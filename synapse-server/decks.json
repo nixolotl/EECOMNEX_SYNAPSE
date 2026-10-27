@@ -1,1 +1,64 @@
-{}
+{
+  "git": {
+    "id": "git",
+    "name": "git",
+    "notes": "1. What is Git?\nDefinition: Git is a distributed version control system that acts like a \"time machine\" for your code or text files.\n\nPurpose: It tracks changes over time, allows you to revert back to previous versions, and makes collaboration with multiple people seamless.\n\n2. The Three Core States\nYour files in a Git project exist in one of three main states:\n\nModified: You have changed the file in your working directory, but haven't saved it to the database yet.\n\nStaged: You have marked a modified file to be included in your next commit snapshot.\n\nCommitted: The data is safely and permanently stored in your local Git database history.\n\n3. Basic Workflow Commands\nThe everyday cycle of working with Git usually follows these commands:\n\ngit status — Checks the current state of your working directory and staged files.\n\ngit add <file> — Moves modified files from the working directory to the staging area.\n\ngit commit -m \"message\" — Saves the staged snapshot permanently with a descriptive note.\n\ngit push — Uploads your local commits to a remote repository (like GitHub).\n\ngit pull — Fetches and merges the latest changes from the remote repository down to your local machine.\n\n4. Branching & Merging\nBranches: Separate lines of development. They let you experiment, build new features, or fix bugs without breaking your main working code (main or master).\n\nMerging: Combining the work done on a separate branch back into your main branch once it is tested and ready.\n\n5. Why Use It?\nSafety Net: You can never truly \"lose\" code because every past version is saved.\n\nCollaboration: Multiple people can work on the exact same project simultaneously without overwriting each other's work.",
+    "cards": [
+      {
+        "q": "What is Git?",
+        "a": "Version control",
+        "w": [
+          "A text editor",
+          "A cloud drive",
+          "A programming lang"
+        ]
+      },
+      {
+        "q": "What state is a file in once saved to the database?",
+        "a": "Committed",
+        "w": [
+          "Modified",
+          "Staged",
+          "Pushed"
+        ]
+      },
+      {
+        "q": "Which command moves files to the staging area?",
+        "a": "git add",
+        "w": [
+          "git status",
+          "git commit",
+          "git push"
+        ]
+      },
+      {
+        "q": "Which command uploads commits to a remote repository?",
+        "a": "git push",
+        "w": [
+          "git pull",
+          "git add",
+          "git merge"
+        ]
+      },
+      {
+        "q": "What are separate lines of development called?",
+        "a": "Branches",
+        "w": [
+          "Commits",
+          "Snapshots",
+          "Directories"
+        ]
+      },
+      {
+        "q": "Which command fetches changes from the remote?",
+        "a": "git pull",
+        "w": [
+          "git push",
+          "git status",
+          "git commit"
+        ]
+      }
+    ],
+    "updated": "2026-10-19T04:34:53.405Z"
+  }
+}
