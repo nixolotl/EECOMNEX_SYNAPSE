@@ -1,5 +1,254 @@
 {
-  "git": {
+  "circuits": {
+    "id": "circuits",
+    "name": "circuits",
+    "notes": "1. What is a Circuit?\nA circuit is a closed path that allows electric current to flow from a power source through electrical components and back to the source.\n\n2. Basic Components of a Circuit\n- Power Source: Supplies electrical energy, such as a battery.\n- Conductor: Provides a path for current, usually a wire.\n- Load: Uses electrical energy, such as a light bulb or resistor.\n- Switch: Opens or closes the circuit to control current.\n- Resistor: Limits the flow of current.\n- Capacitor: Stores electrical energy in an electric field.\n- Inductor: Stores energy in a magnetic field.\n- Diode: Allows current to flow mainly in one direction.\n- Transistor: Controls or amplifies electrical signals.\n3. Types of Circuits\n- Open Circuit: The path is broken, so no current flows.\n- Closed Circuit: The path is complete, allowing current to flow.\n- Short Circuit: Current flows through a path with very low resistance, potentially causing excessive current.\n- Series Circuit: Components are connected along a single path.\n- Parallel Circuit: Components are connected across separate branches.\n4. Series Circuit\n- The same current flows through every component.\n- Voltage is divided among the components.\n- Total resistance is the sum of all resistances.\nFormula:\nRₜ = R₁ + R₂ + R₃ + ...\n\n5. Parallel Circuit\n- Voltage is the same across every branch.\n- Current divides among the branches.\n- Total resistance is less than the smallest individual resistance.\nFormula:\n1/Rₜ = 1/R₁ + 1/R₂ + 1/R₃ + ...\n\nFor two resistors:\nRₜ = (R₁ × R₂) / (R₁ + R₂)\n\n6. Basic Electrical Quantities\n- Voltage (V): Electrical potential difference, measured in volts (V).\n- Current (I): Flow of electric charge, measured in amperes (A).\n- Resistance (R): Opposition to current flow, measured in ohms (Ω).\n- Power (P): Rate at which electrical energy is transferred, measured in watts (W).\n- Charge (Q): Amount of electric charge, measured in coulombs (C).\n7. Ohm's Law\nOhm's Law describes the relationship between voltage, current, and resistance.\n\nFormulas:\nV = IR\nI = V/R\nR = V/I\n\nWhere:\nV = Voltage\nI = Current\nR = Resistance\n\n8. Electrical Power\nElectrical power measures how quickly a circuit uses or transfers energy.\n\nFormulas:\nP = VI\nP = I²R\nP = V²/R\n\n9. Kirchhoff's Laws\n\nKirchhoff's Current Law (KCL):\nThe total current entering a junction equals the total current leaving it.\n\nΣI entering = ΣI leaving\n\nKirchhoff's Voltage Law (KVL):\nThe sum of all voltage rises and drops around a closed loop is zero.\n\nΣV = 0\n\n10. Direct Current (DC) and Alternating Current (AC)\n- DC: Current flows in one direction. Example: battery-powered circuits.\n- AC: Current periodically changes direction. Example: household electrical supply.\n11. Conductors, Insulators, and Semiconductors\n- Conductors: Allow current to flow easily, such as copper.\n- Insulators: Resist current flow, such as rubber and glass.\n- Semiconductors: Have electrical properties between conductors and insulators, such as silicon.\n12. Common Circuit Symbols\n- Battery: Provides voltage.\n- Resistor: Limits current.\n- Capacitor: Stores charge.\n- Inductor: Stores magnetic energy.\n- Diode: Controls the direction of current.\n- Ground: Reference point for circuit voltage.\n- Switch: Opens or closes a circuit.\n13. Measuring Circuit Quantities\n- Ammeter: Measures current and is connected in series.\n- Voltmeter: Measures voltage and is connected in parallel.\n- Ohmmeter: Measures resistance, usually when the circuit is de-energized.\n- Multimeter: Measures voltage, current, resistance, and other quantities.\n14. Important Circuit Formulas\n\nOhm's Law:\nV = IR\n\nSeries Resistance:\nRₜ = R₁ + R₂ + ...\n\nParallel Resistance:\n1/Rₜ = 1/R₁ + 1/R₂ + ...\n\nPower:\nP = VI\n\nCharge:\nQ = It\n\nEnergy:\nE = Pt\n\n15. Basic Circuit Safety\n- Disconnect the power before modifying a circuit.\n- Avoid touching exposed conductors in energized circuits.\n- Use the correct component ratings.\n- Prevent short circuits.\n- Never measure resistance on a powered circuit.\n- Use appropriate protective equipment when working with electrical systems.\nKey takeaway: Voltage drives current, resistance opposes current, and electrical components control, store, or use energy within a circuit.",
+    "cards": [
+      {
+        "q": "What component stores energy in a magnetic field?",
+        "a": "Inductor",
+        "w": [
+          "Capacitor",
+          "Resistor",
+          "Diode"
+        ]
+      },
+      {
+        "q": "Which circuit has a broken path with no current?",
+        "a": "Open Circuit",
+        "w": [
+          "Closed Circuit",
+          "Short Circuit",
+          "Series Circuit"
+        ]
+      },
+      {
+        "q": "How is an ammeter connected in a circuit?",
+        "a": "In series",
+        "w": [
+          "In parallel",
+          "In a loop",
+          "At the source"
+        ]
+      },
+      {
+        "q": "What is the unit for electrical charge?",
+        "a": "Coulombs",
+        "w": [
+          "Amperes",
+          "Volts",
+          "Ohms"
+        ]
+      },
+      {
+        "q": "What measures resistance in a circuit?",
+        "a": "Ohmmeter",
+        "w": [
+          "Voltmeter",
+          "Ammeter",
+          "Multimeter"
+        ]
+      },
+      {
+        "q": "What law states sum of voltages is zero?",
+        "a": "Kirchhoffs Law",
+        "w": [
+          "Ohms Law",
+          "Newtons Law",
+          "Faradays Law"
+        ]
+      },
+      {
+        "q": "Which material resists current flow well?",
+        "a": "Insulator",
+        "w": [
+          "Conductor",
+          "Semiconductor",
+          "Battery"
+        ]
+      }
+    ],
+    "updated": "2026-10-19T09:39:40.852Z"
+  },
+  "discrete": {
+    "id": "discrete",
+    "name": "discrete",
+    "notes": "CPE105 Discrete Mathematics NUMBER THEORY -- 1 of 84 -- 2 Introduction Number theory is defined as the part of mathematics devoted to the study of the set of integers and their properties. -- 2 of 84 -- 3 Divisibility Example: Determine whether 3 | 7 and whether 3 | 12 We see that 3 does not divide 7 because 7/3 is not an integer. However, 3 | 12 because 12/3 = 4 (an integer). -- 3 of 84 -- 4 Divisibility Some of the basic properties of divisibility of integers are provided below: -- 4 of 84 -- 5 The Division Algorithm When an integer is divided by a positive integer, there is a quotient and a remainder; as expressed in the division algorithm. -- 5 of 84 -- 6 The Division Algorithm Examples: What are the quotient and remainder when 101 is divided by 11? What are the quotient and remainder when -11 is divided by 3? -- 6 of 84 -- 7 Modular Arithmetic Modular arithmetic, sometimes referred to as modulus arithmetic or clock arithmetic, in its most elementary form, arithmetic done with a count that resets itself to zero every time a certain whole number N greater than one, known as the modulus (mod), has been reached. -- 7 of 84 -- 8 Modular Arithmetic Example: Determine whether 17 is congruent to 5 modulo 6 and whether 24 and 14 are congruent modulo 6 Because 6 divides 17 – 5 = 12, we see that 17 ≡ 5 (mod 6). However, because 24 – 14 = 10 it not divisible by 6, we see that 24 ≢ 14 (mod 6). -- 8 of 84 -- 9 Modular Arithmetic Example: Find the value of (193 mod 31)4 mod 23. First, we will evaluate 193 mod 31. Since 193 = 6859 and 6859 = 221 x 31 + 8, we have 193 mod 31 = 6859 mod 31 = 8. So, (193 mod 31)4 mod 23 = 84 mod 23. Note that 84 = 4096 and because 4096 = 178 x 23 + 2, we have 4096 mod 23 = 2. Hence, (193 mod 31)4 mod 23 = 2. -- 9 of 84 -- 10 Representations of Integers In everyday life, we use decimal notation to express integers. In decimal notation, an integer 𝑛 is written as a sum of the form 𝑎𝑘10𝑘 + 𝑎𝑘−110𝑘−1 + ⋯ + 𝑎110 + 𝑎0 where 𝑎𝑗 is an integer with 0 ≤ 𝑎𝑗 ≤ 9 for 𝑗 = 0,1, … , 𝑘. In computers, the binary notation (base 2) is used when carrying out arithmetic and octal representation (base 8) or hexadecimal notation (base 16) are used when displacing characters. -- 10 of 84 -- 11 Representations of Integers Examples: What is the decimal expansion of the integer that has (1 0101 111)2 as its binary expansion? What is the decimal expansion of the number with the octal expansion (7016)8? What is the decimal expansion of the number with hexadecimal expansion (2AE0B)16? Note that digits 10 to 15 are expressed as A to F, respectively. -- 11 of 84 -- 12 Base Conversion The algorithm for constructing the base 𝑏 expansion of an integer 𝑛 is described below: • Divide 𝑛 by 𝑏 to obtain a quotient and a remainder • The remainder 𝑎0 is the rightmost digit in the base 𝑏 expansion of 𝑛. • Divide 𝑞0 by 𝑏 to obtain • The remainder 𝑎1 is the second digit from the right in the base 𝑏 expansion of 𝑛. • Continue this process, successively dividing the quotients by 𝑏, obtaining base 𝑏 digits as the remainders. • The process terminates when we obtain a quotient equal to zero. It produces the base 𝑏 digits of 𝑛 from the right to the left. -- 12 of 84 -- 13 Base Conversion Examples: Find the octal expansion of (12345)10 The successive remainders that we have found; 1, 7, 0, 0, and 3, are the digits from the right to the left of 12345 in base 8. Hence, -- 13 of 84 -- 14 Base Conversion Examples: Find the hexadecimal expansion of (177130)10 The successive remainders that we have found; 10, 14, 3, 11, and 2, gives us the digits from the right to the left of 177130 in the hexadecimal (base 16) expansion of (177130)10. It follows that: -- 14 of 84 -- 15 Base Conversion Examples: Find the binary expansion of (241)10 -- 15 of 84 -- 16 Base Conversion -- 16 of 84 -- 17 Base Conversion -- 17 of 84 -- 18 Conversion between Binary, Octal, and Hexadecimal For binary to octal, group the binary digits into blocks of three and add initial zeroes at the start of the leftmost block if necessary. Then, convert each block to the respective octal representation. For binary to hexadecimal, group the binary digits into blocks of four and add initial zeroes at the start of the leftmost block if necessary. Then, convert each block to the respective hexadecimal representation. The process is then reversed for octal or hexadecimal to binary representation. Each character or digit is converted into the three block binary and four block binary, respectively. Remove the zeroes at the start of the leftmost block and write the full binary representation. -- 18 of 84 -- 19 Conversion between Binary, Octal, and Hexadecimal Example: Find the octal and hexadecimal expansions of (11 1110 1011 1100)2 and the binary expansions of (765)8 and (A8D)16. -- 19 of 84 -- 20 Conversion between Binary, Octal, and Hexadecimal Example: Find the octal and hexadecimal expansions of (11 1110 1011 1100)2 and the binary expansions of (765)8 and (A8D)16. 7 6 5 111 110 101 (1 1111 0101)2 A 8 D 1010 1000 1101 (1010 1000 1101)2 -- 20 of 84 -- 21 Algorithms for Integer Operations Addition Algorithm To add 𝑎 and 𝑏, first add their rightmost bits. This gives where 𝑠0 is the rightmost bit in the binary expansion of 𝑎 + 𝑏 and 𝑐0 is the carry, which is either 0 or 1. Then add the next pair of bits and the carry, where 𝑠1 is the next bit (from the right) in the binary expansion of 𝑎 + 𝑏, and 𝑐1 is the carry. Continue this process, adding the corresponding bits in the two binary expansions and the carry, to determine the next bit in the binary expansion of 𝑎 + 𝑏. At the last state, add 𝑎𝑛−1, 𝑏𝑛−1 and 𝑐𝑛−2 to obtain 𝑐𝑛−1 ∙ 2 + 𝑠𝑛−1. The leading bit of the sum is 𝑠𝑛 = 𝑐𝑛−1. This procedure produces the binary expansion of the sum, namely: -- 21 of 84 -- 22 Algorithms for Integer Operations Addition Algorithm -- 22 of 84 -- 23 Algorithms for Integer Operations Addition Algorithm Example: Add a = (1110)2 and b = (1011)2 -- 23 of 84 -- 24 Algorithms for Integer Operations Multiplication Algorithm To multiply 𝑎 and 𝑏, using the distributive law; we see that: We first note 𝑎𝑏𝑗 = 𝑎 if 𝑏𝑗 = 1 and 𝑎𝑏𝑗 = 0 if 𝑏𝑗 = 0. Each time we multiply a term by 2, we shift its binary expansion one place to the left and add a zero at the tail end of the expansion. Consequently, we can obtain 𝑎𝑏𝑗 2𝑗 by shifting the binary expansion of 𝑎𝑏𝑗 𝑗 places to the left, adding 𝑗 zero bits at the tail end of this binary expansion. Finally we obtain 𝑎𝑏 by adding the 𝑛 integers 𝑎𝑏𝑗 2𝑗, 𝑗 = 0,1,2, … , 𝑛 − 1 -- 24 of 84 -- 25 Algorithms for Integer Operations Multiplication Algorithm -- 25 of 84 -- 26 Primes Every integer greater than 1 is divisible by at least two integers, because a positive integer is divisible by 1 and by itself. Positive integers that have exactly two different positive integer factors are called primes. -- 26 of 84 -- 27 The Sieve of Eratosthenes The Sieve of Eratosthenes is used to find all primes not exceeding a specified positive integer. For instance, the following procedure is used to find the primes not exceeding 100. -- 27 of 84 -- 28 The Sieve of Eratosthenes The Sieve of Eratosthenes is used to find all primes not exceeding a specified positive integer. For instance, the following procedure is used to find the primes not exceeding 100. -- 28 of 84 -- 29 Greatest Common Divisors The largest integer that divides both of two integers is called the greatest common divisor of these integers. Example: What is the greatest common divisor of 24 and 36? The positive common divisors of 24 and 36 are 1, 2, 3, 4, 6, and 12. Hence, gcd (24, 36) = 12. -- 29 of 84 -- 30 Greatest Common Divisors Example: What is the greatest common divisor of 17 and 22? The integers 17 and 22 have no positive common divisors other than 1, so that means gcd(17,22) = 1. -- 30 of 84 -- 31 Greatest Common Divisors Example: Determine whether the integers 10, 17, and 21 are pairwise relative",
+    "cards": [
+      {
+        "q": "What is number theory the study of?",
+        "a": "Set of integers",
+        "w": [
+          "Binary notation",
+          "Prime factors",
+          "Clock arithmetic"
+        ]
+      },
+      {
+        "q": "Which number is used for hexadecimal notation?",
+        "a": "16",
+        "w": [
+          "2",
+          "8",
+          "10"
+        ]
+      },
+      {
+        "q": "What are integers with exactly two factors called?",
+        "a": "Primes",
+        "w": [
+          "Moduli",
+          "Quotients",
+          "Remainders"
+        ]
+      },
+      {
+        "q": "What is used to find primes up to a limit?",
+        "a": "Sieve Eratosthenes",
+        "w": [
+          "Division Algorithm",
+          "Binary expansion",
+          "Decimal notation"
+        ]
+      },
+      {
+        "q": "The largest integer dividing two integers is the what?",
+        "a": "Greatest divisor",
+        "w": [
+          "Lowest modulus",
+          "Prime constant",
+          "Binary quotient"
+        ]
+      }
+    ],
+    "updated": "2026-10-19T10:12:30.893Z"
+  },
+  "relations": {
+    "id": "relations",
+    "name": "relations",
+    "notes": "CPE105 Discrete Mathematics RELATIONS -- 1 of 15 -- 2 Introduction Relationships between elements of sets are represented using the structure called a relation. The most direct way to express a relationship between elements of two sets is to use ordered pairs. For this reason, sets of ordered pairs are called binary relations. In other words, a binary relation from A to B is a set R of ordered pairs, where the first element of each ordered pair comes from A and the second element comes from B. We use the notation a R b to denote that (a, b) ∈ R and a /𝑅 b to denote that (a, b) ∉ R. Moreover, when (a, b) belongs to R, a is said to be related to b by R. -- 2 of 15 -- 3 Example Let A be the set of students in your school, and let B be the set of courses. Let R be the relation that consists of those pairs (a, b), where a is a student enrolled in course b. For instance, if Jason Goodfriend and Deborah Sherman are enrolled in CS518, the pairs (Jason Goodfriend, CS518) and (Deborah Sherman, CS518) belong to R. If Jason Goodfriend is also enrolled in CS510, then the pair (Jason Goodfriend, CS510) is also in R. However, if Deborah Sherman is not enrolled in CS510, then the pair (Deborah Sherman, CS510) is not in R. Note that if a student is not currently enrolled in any courses there will be no pairs in R that have this student as the first element. Similarly, if a course is not currently being offered there will be no pairs in R that have this course as their second element. -- 3 of 15 -- 4 Functions as Relations Remember that a function f from a set A to a set B assigns a unique element of B to each element of A. The graph of f is the set of ordered pairs (a, b) such that b = f(a). Since the graph of f is a subset of A x B, it is a relation from A to B. Moreover, for each element a of A, there is exactly one ordered pair in the graph that has a as its first element. -- 4 of 15 -- 5 Relations on a Set Definition: A relation on the set A is a relation from A to A. In other words, a relation on the set A is a subset of A x A. Example: Let A be the set {1, 2, 3, 4}. Which ordered pairs are in the relation R ={(a, b) ∣ a divides b}? Because (a, b) is in R if and only if a and b are positive integers not exceeding 4 such that a divides b, we see that R ={(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 4), (3, 3), (4, 4)}. -- 5 of 15 -- 6 Reflexive Relation Definition: A relation R on a set A is called reflexive if (a, a) ∈ R for every element a ∈ A. Example: Consider the following relations on {1, 2, 3, 4}: R1 = {(1, 1), (1, 2), (2, 1), (2, 2), (3, 4), (4, 1), (4, 4)}, R2 = {(1, 1), (1, 2), (2, 1)}, R3 = {(1, 1), (1, 2), (1, 4), (2, 1), (2, 2), (3, 3), (4, 1), (4, 4)}, R4 = {(2, 1), (3, 1), (3, 2), (4, 1), (4, 2), (4, 3)}, R5 = {(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4), (3, 3), (3, 4), (4, 4)}, R6 = {(3, 4)}. The relations R3 and R5 are reflexive because they both contain all pairs of the form (a, a), namely, (1, 1), (2, 2), (3, 3), and (4, 4). The other relations are not reflexive because they do not contain all of these ordered pairs. In particular, R1, R2, R4, and R6 are not reflexive because (3, 3) is not in any of these relations. -- 6 of 15 -- 7 Symmetric and Antisymmetric Relation Definition: A relation R on a set A is called symmetric if (b, a) ∈ R whenever (a, b) ∈ R, for all a, b ∈ A. A relation R on a set A such that for all a, b ∈ A, if (a, b) ∈ R and (b, a) ∈ R, then a = b is called antisymmetric. Example: Consider the following relations on {1, 2, 3, 4}: R1 = {(1, 1), (1, 2), (2, 1), (2, 2), (3, 4), (4, 1), (4, 4)}, R2 = {(1, 1), (1, 2), (2, 1)}, R3 = {(1, 1), (1, 2), (1, 4), (2, 1), (2, 2), (3, 3), (4, 1), (4, 4)}, R4 = {(2, 1), (3, 1), (3, 2), (4, 1), (4, 2), (4, 3)}, R5 = {(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4), (3, 3), (3, 4), (4, 4)}, R6 = {(3, 4)}. The relations R2 and R3 are symmetric, because in each case (b, a) belongs to the relation whenever (a, b) does. For R2, the only thing to check is that both (2, 1) and (1, 2) are in the relation. For R3, it is necessary to check that both (1, 2) and (2, 1) belong to the relation, and (1, 4) and (4, 1) belong to the relation. The reader should verify that none of the other relations is symmetric. This is done by finding a pair (a, b) such that it is in the relation but (b, a) is not. -- 7 of 15 -- 8 Symmetric and Antisymmetric Relation Definition: A relation R on a set A is called symmetric if (b, a) ∈ R whenever (a, b) ∈ R, for all a, b ∈ A. A relation R on a set A such that for all a, b ∈ A, if (a, b) ∈ R and (b, a) ∈ R, then a = b is called antisymmetric. Example: Consider the following relations on {1, 2, 3, 4}: R1 = {(1, 1), (1, 2), (2, 1), (2, 2), (3, 4), (4, 1), (4, 4)}, R2 = {(1, 1), (1, 2), (2, 1)}, R3 = {(1, 1), (1, 2), (1, 4), (2, 1), (2, 2), (3, 3), (4, 1), (4, 4)}, R4 = {(2, 1), (3, 1), (3, 2), (4, 1), (4, 2), (4, 3)}, R5 = {(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4), (3, 3), (3, 4), (4, 4)}, R6 = {(3, 4)}. R4, R5, and R6 are all antisymmetric. For each of these relations there is no pair of elements a and b with a ≠ b such that both (a, b) and (b, a) belong to the relation. The reader should verify that none of the other relations is antisymmetric. This is done by finding a pair (a, b) with a ≠ b such that (a, b) and (b, a) are both in the relation. -- 8 of 15 -- 9 Transitive Relation Definition: A relation R on a set A is called transitive if whenever (a, b) ∈ R and (b, c) ∈ R, then (a, c) ∈ R, for all a, b, c ∈ A. Example: Consider the following relations on {1, 2, 3, 4}: R1 = {(1, 1), (1, 2), (2, 1), (2, 2), (3, 4), (4, 1), (4, 4)}, R2 = {(1, 1), (1, 2), (2, 1)}, R3 = {(1, 1), (1, 2), (1, 4), (2, 1), (2, 2), (3, 3), (4, 1), (4, 4)}, R4 = {(2, 1), (3, 1), (3, 2), (4, 1), (4, 2), (4, 3)}, R5 = {(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3), (2, 4), (3, 3), (3, 4), (4, 4)}, R6 = {(3, 4)}. R4, R5, and R6 are transitive. For each of these relations, we can show that it is transitive by verifying that if (a, b) and (b, c) belong to this relation, then (a, c) also does. For instance, R4 is transitive, because (3, 2) and (2, 1), (4, 2) and (2, 1), (4, 3) and (3, 1), and (4, 3) and (3, 2) are the only such sets of pairs, and (3, 1), (4, 1), and (4, 2) belong to R4. The reader should verify that R5 and R6 are transitive. -- 9 of 15 -- 10 Combining Relations Because relations from A to B are subsets of A × B, two relations from A to B can be combined in any way two sets can be combined. Example: Let A = {1, 2, 3} and B = {1, 2, 3, 4}. The relations R1 ={(1, 1), (2, 2), (3, 3)} and R2 ={(1, 1), (1, 2), (1, 3), (1, 4)} can be combined to obtain R1 ∪ R2 = {(1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (3, 3)}, R1 ∩ R2 = {(1, 1)}, R1 − R2 = {(2, 2), (3, 3)}, R2 − R1 = {(1, 2), (1, 3), (1, 4)}. -- 10 of 15 -- 11 Representing Relations using Matrices A relation between finite sets can be represented using a zero–one matrix. Suppose that R is a relation from A ={a1, a2, … ,am} to B = {b1, b2, … ,bn}. (Here the elements of the sets A and B have been listed in a particular, but arbitrary, order. Furthermore, when A = B we use the same ordering for A and B.) The relation R can be represented by the matrix MR = [mij], where: -- 11 of 15 -- 12 Example Suppose that A = {1,2,3} and B = {1,2}. Let R be the relation from A to B containing (a, b) if a ∈ A, b ∈ B, and a > b. What is the matrix representing R if a1 = 1, a2 = 2, and a3 = 3, and b1 = 1, and b2 = 2? Because R ={(2, 1), (3, 1), (3, 2)}, the matrix for R is: The 1s in MR show that the pairs (2, 1), (3, 1), and (3, 2) belong to R. The 0s show that no other pairs belong to R. -- 12 of 15 -- 13 Representing Relations using Digraphs A directed graph, or digraph, consists of a set V of vertices (or nodes) together with a set E of ordered pairs of elements of V called edges (or arcs). The vertex a is called the initial vertex of the edge (a, b), and vertex b is called the terminal vertex of the edge. An edge of the form",
+    "cards": [
+      {
+        "q": "What are sets of ordered pairs called?",
+        "a": "binary relations",
+        "w": [
+          "set relations",
+          "ordered sets",
+          "element pairs"
+        ]
+      },
+      {
+        "q": "What type of relation must contain (a, a) for all a in A?",
+        "a": "reflexive",
+        "w": [
+          "symmetric",
+          "antisymmetric",
+          "transitive"
+        ]
+      },
+      {
+        "q": "A relation R is symmetric if (b, a) is in R when what?",
+        "a": "(a, b) is in R",
+        "w": [
+          "(a, b) is not in R",
+          "(a, b) = (b, a)",
+          "(b, a) is in A"
+        ]
+      },
+      {
+        "q": "What is a relation from a set A to itself?",
+        "a": "relation on a set",
+        "w": [
+          "binary relation",
+          "reflexive set",
+          "ordered relation"
+        ]
+      },
+      {
+        "q": "A relation R is transitive if (a, b) and (b, c) are in R, th",
+        "a": "(a, c) is in R",
+        "w": [
+          "(c, a) is in R",
+          "(a, c) not in R",
+          "(a, a) is in R"
+        ]
+      },
+      {
+        "q": "What represents a relation between finite sets?",
+        "a": "zero-one matrix",
+        "w": [
+          "linear equation",
+          "binary graph",
+          "ordered matrix"
+        ]
+      }
+    ],
+    "updated": "2026-10-19T10:23:58.940Z"
+  },
+  "numerical-methods": {
+    "id": "numerical-methods",
+    "name": "numerical methods",
+    "notes": "Andrea Luisa S. Tan MATH161 M2 NOTES 2ND SESSION (117- IN A357) 09/10/2026 DETERMINANT OF A MATRIX ↳ Cofactor Expansion of a Determinant * expanding det A by cofactors along any row/column for each 1 ≤ i ≤ n, det A = ai1Ci1 + ai2Ci2 + ... + ainCin (ith row) * for each 1 ≤ j ≤ n, det A = a1jC1j + a2jC2j ... + anjCnj (jth column) * Find cofactor of elements C23 of det A = | 1 4 -1 | | 2 3 5 | | 6 2 3 | C23 = (-1) | 1 4 | = (-1) (2-24) = (-1)(-22) = 22 [Wait, looking at image: C23 = (-1) | 1 4 | = (-1)(2-24) = (-1)(-22) = 22] * Ex.: A = | 2 4 7 | | 6 0 3 | | 1 5 3 | @ i = 1 det A = a11C11 + a12C12 + a13C13 det A = a11C11 + a12C12 + a13C13 = 2| 0 3 | - 4| 6 3 | + 7| 6 0 | | 5 3 | | 1 3 | | 1 5 | = 2(-15) - 4(18-3) + 7(30) det A = 120 @ j = 1 det A = a11C11 + a21C21 + a31C31 = 2| 0 3 | - 6| 4 7 | + 1| 4 7 | | 5 3 | | 5 3 | | 0 3 | = 2(-15) - 6(12-35) + 1(12) det A = 120 @ i = 2 det A = a21C21 + a22C22 + a23C23 = -6| 4 7 | + 0| 2 7 | - 3| 2 4 | | 5 3 | | 1 3 | | 1 5 | = -6(12-35) - 3(10-4) det A = 120 ↳ Properties of Determinants * Determinant of a Transpose → det A = det AT * Two Identical Rows → they have same determinant * zero Row/Column → all elements in i or j : det = 0 * Interchanging → mat B is interchange of mat A : det B = -det A * Constant Multiple of a Row det B = | 5 8 | = 5 | 1 8 | = 40-2 | 1 1 | = 80(1-20) = -80 | 20 16 | | 4 16 | | 1 1 | * Determinant of a Product Matrix → det AB = det A · det B * \" \" \" Triangular Matrix → Multiply the main diagonal Andrea Luisa J. Tan MATH161 M2 NOTES 2ND SESSION (117- IN A352) 09/10/2026 INVERSE OF A MATRIX ↳ Let A: nxn matrix, if there exists an nxn matrix B such that AB = BA = I ↳ Nonsingular Matrix A = [2 1; 1 1] B = [1 -1; -1 2] if AB = [1 0; 0 1] INVERSE IDENTITY ↳ Properties of the Inverse * (A⁻¹)⁻¹ = A * (AB)⁻¹ = B⁻¹A⁻¹ * (AT)⁻¹ = (A⁻¹)ᵀ ↳ Solutions to Obtain Inverse of a Matrix * Adjoint Method → A⁻¹ = (1/det A) adj A ↑ ≠0 → get the cofactor of all entries, then transpose Find the adj A if A = [1 0 3; 2 -1 -1; -4 0 5] Adj A = [c11 ...; : cnn] c11 = |-1 -1; 0 5| = -5 c21 = |0 3; 0 5| = 0 c31 = |0 3; -1 -1| = 3 Adj A = [-5 -6 -9; 0 17 0; 3 7 -1]ᵀ → Adj A = [-5 0 3; -6 17 7; -9 0 -1] c12 = |2 -1; -4 5| = -6 c22 = |1 3; -4 5| = 17 c32 = |1 3; 2 -1| = -7 c13 = |2 -1; -4 0| = -4 c23 = |1 0; 4 0| = 0 c33 = |1 0; 2 -1| = -1 Get det A A = [1 0 3; 2 -1 -1; -4 0 5] det A = (-1) |1 3; -4 0| = (-1) (5 + 12) = -17 A⁻¹ = (1/det A) adj A = -1/32 [-5 0 3; -6 17 7; -4 0 1] A⁻¹ = [5/17 0 -3/17; 6/17 -17/17 -7/17; -4/17 0 1/17]",
+    "cards": [
+      {
+        "q": "What is det A if a row consists of all zeros?",
+        "a": "0",
+        "w": [
+          "1",
+          "Undefined",
+          "-1"
+        ]
+      },
+      {
+        "q": "What is det AB equal to?",
+        "a": "det A x det B",
+        "w": [
+          "det A + det B",
+          "det A / det B",
+          "det A - det B"
+        ]
+      },
+      {
+        "q": "What property relates det A and det AT?",
+        "a": "det A = det AT",
+        "w": [
+          "det A = -det AT",
+          "det A = 1/det AT",
+          "det A = 0"
+        ]
+      },
+      {
+        "q": "For a triangular matrix, how is the det found?",
+        "a": "Multiply diagonal",
+        "w": [
+          "Add diagonal",
+          "Sum of rows",
+          "Product of rows"
+        ]
+      },
+      {
+        "q": "What is the property (AB) inverse equal to?",
+        "a": "B inverse A invers",
+        "w": [
+          "A inverse B invers",
+          "A inverse B",
+          "B A inverse"
+        ]
+      },
+      {
+        "q": "In the adjoint method, what is A inverse?",
+        "a": "(1/det A) adj A",
+        "w": [
+          "(det A) adj A",
+          "(1/adj A) det A",
+          "adj A / det A"
+        ]
+      }
+    ],
+    "updated": "2026-10-19T11:00:45.400Z"
+  }
+
+  ,"git": {
     "id": "git",
     "name": "git",
     "notes": "1. What is Git?\nDefinition: Git is a distributed version control system that acts like a \"time machine\" for your code or text files.\n\nPurpose: It tracks changes over time, allows you to revert back to previous versions, and makes collaboration with multiple people seamless.\n\n2. The Three Core States\nYour files in a Git project exist in one of three main states:\n\nModified: You have changed the file in your working directory, but haven't saved it to the database yet.\n\nStaged: You have marked a modified file to be included in your next commit snapshot.\n\nCommitted: The data is safely and permanently stored in your local Git database history.\n\n3. Basic Workflow Commands\nThe everyday cycle of working with Git usually follows these commands:\n\ngit status — Checks the current state of your working directory and staged files.\n\ngit add <file> — Moves modified files from the working directory to the staging area.\n\ngit commit -m \"message\" — Saves the staged snapshot permanently with a descriptive note.\n\ngit push — Uploads your local commits to a remote repository (like GitHub).\n\ngit pull — Fetches and merges the latest changes from the remote repository down to your local machine.\n\n4. Branching & Merging\nBranches: Separate lines of development. They let you experiment, build new features, or fix bugs without breaking your main working code (main or master).\n\nMerging: Combining the work done on a separate branch back into your main branch once it is tested and ready.\n\n5. Why Use It?\nSafety Net: You can never truly \"lose\" code because every past version is saved.\n\nCollaboration: Multiple people can work on the exact same project simultaneously without overwriting each other's work.",

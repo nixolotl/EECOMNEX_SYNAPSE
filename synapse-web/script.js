@@ -376,45 +376,67 @@ function showUploading(on) {
   if (on) $("uploadTitleText").textContent = "Reading file...";
 }
 
+
 async function handleFile(file) {
   if (!file) return;
+
   setMsg(uploadMsg, "", "");
   showUploading(true);
 
   try {
     const lower = file.name.toLowerCase();
-    let text = "";
+    const allowed = [".pdf", ".txt", ".docx"];
+    const ext = allowed.find((ending) => lower.endsWith(ending));
 
-    if (lower.endsWith(".txt")) {
-      text = await file.text();
-    } else if (lower.endsWith(".docx")) {
-      if (typeof mammoth === "undefined") {
-        throw new Error("The Word reader did not load. Check your internet connection and refresh.");
-      }
-      const result = await mammoth.extractRawText({ arrayBuffer: await file.arrayBuffer() });
-      text = result.value;
-    } else {
-      throw new Error("Please choose a .docx or .txt file.");
+    if (!ext) {
+      throw new Error("Please choose a PDF, TXT, or DOCX file.");
     }
 
-    text = text.trim();
-    if (!text) throw new Error("No text was found in that file.");
+    if (file.size > 5 * 1024 * 1024) {
+      throw new Error("File is too large. Please choose a file under 5 MB.");
+    }
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(SERVER + "/api/upload", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Could not read that file.");
+    }
+
+    const text = (data.notes || "").trim();
+
+    if (!text) {
+      throw new Error("No readable text was found in that file.");
+    }
 
     $("notes").value = text;
     $("uploadTitleText").textContent = file.name;
-    $("uploadDescText").textContent = "Text extracted into the notes field below";
+    $("uploadDescText").textContent =
+      "Text extracted into the notes field below";
 
-    if (text.length > MAX_NOTES) {
-      setMsg(uploadMsg, `That is ${text.length} characters. The server accepts up to ${MAX_NOTES}, so trim the notes before generating.`, "error");
+    if (data.truncated) {
+      setMsg(
+        uploadMsg,
+        "Text was shortened to 8,000 characters. Review it before generating.",
+        "info"
+      );
     } else {
       setMsg(uploadMsg, "Text loaded into your notes.", "success");
     }
   } catch (err) {
-    $("uploadTitleText").textContent = "Click or drop a .docx or .txt file";
+    $("uploadTitleText").textContent =
+      "Click or drop a PDF, DOCX, or TXT file";
     setMsg(uploadMsg, err.message || "Could not read that file.", "error");
   } finally {
     showUploading(false);
-    docxInput.value = ""; // lets the same file be chosen again
+    docxInput.value = "";
   }
 }
 
